@@ -1,5 +1,5 @@
 # Created By : Joe Antony
-# Modified By : Kumara D
+# Modified By : Kumara d
 # Copyright (c) ibsplc.com
 # Purpose : 11-2 Current Year + Same Date Of The
 # Previous Year/Same Day Of The Previous Year Combined Processing
