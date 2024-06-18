@@ -1,0 +1,15 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+    commands:
+      - pip install pytest
+  build:
+    commands:
+      - pytest test_DMDOMITINV00091125.py
+
+artifacts:
+  files:
+    - '**/*'
