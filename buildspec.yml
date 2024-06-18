@@ -11,14 +11,15 @@ phases:
   install:
     runtime-versions:
       python: 3.8
+      java: corretto17
   pre_build:
     commands:
       - echo "Installing dependencies"
       - pip install pytest
       - echo "Downloading and setting up SonarScanner"
-      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
-      - unzip sonar-scanner-cli-3.3.0.1492-linux.zip
-      - export PATH=$PATH:$(pwd)/sonar-scanner-3.3.0.1492-linux/bin
+      - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-4.6.2.2472-linux.zip
+      - unzip sonar-scanner-cli-4.6.2.2472-linux.zip
+      - export PATH=$PATH:$(pwd)/sonar-scanner-4.6.2.2472-linux/bin
       - echo "SonarScanner version:"
       - sonar-scanner --version
   build:
