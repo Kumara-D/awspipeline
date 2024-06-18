@@ -26,10 +26,10 @@ phases:
       - echo "Running tests"
       - pytest test_DMDOMITINV00091125.py --junitxml=report.xml
       - echo "Running SonarScanner"
-      - sonar-scanner -Dsonar.projectKey=$Project -Dsonar.organization=$Organization -Dsonar.host.url=$HOST -Dsonar.login=$LOGIN || { echo 'SonarScanner failed'; exit 1; }
+      - sonar-scanner -Dsonar.projectKey="$Project" -Dsonar.organization="$Organization" -Dsonar.host.url="$HOST" -Dsonar.login="$LOGIN" || { echo 'SonarScanner failed'; exit 1; }
       - echo "Checking SonarQube quality gate status"
       - sleep 5
-      - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project -o result.json
+      - curl "https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project" -o result.json
       - cat result.json
       - if [ "$(jq -r '.projectStatus.status' result.json)" = "ERROR" ]; then echo 'Quality gate failed'; exit 1; fi
 
