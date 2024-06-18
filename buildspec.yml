@@ -1,10 +1,10 @@
 version: 0.2
 env:
   secrets-manager:
-    LOGIN: prod/sonar:SonarToken
-    HOST: prod/sonar:HOST
-    Organization: prod/sonar:Organisation
-    Project: prod/sonar:Project
+    LOGIN: SampleSecret:SonarToken
+    HOST: SampleSecret:HOST
+    Organization: SampleSecret:Organisation
+    Project: SampleSecret:Project
 phases:
   install:
     runtime-versions:
