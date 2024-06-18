@@ -25,11 +25,6 @@ phases:
     commands:
       - echo "Running tests"
       - pytest test_DMDOMITINV00091125.py --junitxml=report.xml
-      - echo "Environment Variables"
-      - echo "Project: $Project"
-      - echo "Organization: $Organization"
-      - echo "Host: $HOST"
-      - echo "Login: $LOGIN"
       - echo "Running SonarScanner"
       - sonar-scanner -Dsonar.projectKey=$Project -Dsonar.organization=$Organization -Dsonar.host.url=$HOST -Dsonar.login=$LOGIN || { echo 'SonarScanner failed'; exit 1; }
       - echo "Checking SonarQube quality gate status"
