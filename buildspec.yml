@@ -5,7 +5,6 @@ env:
     HOST: SampleSecret:HOST
     Organization: SampleSecret:Organisation
     Project: SampleSecret:Project
-
 phases:
   install:
     runtime-versions:
@@ -15,28 +14,19 @@ phases:
       - pip install pytest
       - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
       - unzip sonar-scanner-cli-3.3.0.1492-linux.zip
-      - export PATH=$PATH:$(pwd)/sonar-scanner-3.3.0.1492-linux/bin
-      - apt-get update -y
-      - apt-get install jq -y
+      - export PATH=$PATH:$PWD/sonar-scanner-3.3.0.1492-linux/bin
   build:
     commands:
       - pytest test_DMDOMITINV00091125.py --junitxml=report.xml
-      - sonar-scanner \
-          -Dsonar.projectKey=$Project \
-          -Dsonar.organization=$Organization \
-          -Dsonar.host.url=$HOST \
-          -Dsonar.login=$LOGIN \
-          -Dsonar.python.coverage.reportPaths=report.xml
+      - sonar-scanner -Dsonar.projectKey=$Project -Dsonar.organization=$Organization -Dsonar.host.url=$HOST -Dsonar.login=$LOGIN
       - sleep 5
-      - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project > result.json
+      - curl -s "https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project" -o result.json
       - cat result.json
       - if [ "$(jq -r '.projectStatus.status' result.json)" = "ERROR" ]; then exit 1; fi
-
 artifacts:
   files:
-    - 'report.xml'
+    - '**/*'
   discard-paths: yes
-
 reports:
   pytest_reports:
     files:
