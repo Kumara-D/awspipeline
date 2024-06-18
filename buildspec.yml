@@ -26,7 +26,7 @@ phases:
       - echo "Running tests"
       - pytest test_DMDOMITINV00091125.py --junitxml=report.xml
       - echo "Running SonarScanner"
-      - sonar-scanner -Dsonar.projectKey=$Project -Dsonar.organization=$Organization -Dsonar.host.url=$HOST -Dsonar.login=$LOGIN
+      - sonar-scanner -Dsonar.projectKey=$Project -Dsonar.organization=$Organisation -Dsonar.host.url=$HOST -Dsonar.login=$LOGIN
       - echo "Checking SonarQube quality gate status"
       - sleep 5
       - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project > result.json
