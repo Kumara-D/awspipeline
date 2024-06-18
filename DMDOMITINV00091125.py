@@ -53,7 +53,7 @@ def main():
 
     try:
         insert_table_query = \
-            f" INSERT INTO {ouput_schema}.{target_table} "
+            f" INSERT INTO {ouput_schema}.{target_table} " \
             " WITH CONTENTS AS ( " \
             " SELECT " \
             " A.key as key,	 " \
