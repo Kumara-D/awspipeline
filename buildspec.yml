@@ -5,6 +5,7 @@ env:
     HOST: SampleSecret:HOST
     Organization: SampleSecret:Organisation
     Project: SampleSecret:Project
+
 phases:
   install:
     runtime-versions:
@@ -13,13 +14,31 @@ phases:
     commands:
       - pip install pytest
       - wget https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip
-      - unzip ./sonar-scanner-cli-3.3.0.1492-linux.zip
-      - export PATH=$PATH:/sonar-scanner-3.3.0.1492-linux/bin/
+      - unzip sonar-scanner-cli-3.3.0.1492-linux.zip
+      - export PATH=$PATH:$(pwd)/sonar-scanner-3.3.0.1492-linux/bin
+      - apt-get update -y
+      - apt-get install jq -y
   build:
     commands:
-      - pytest test_DMDOMITINV00091125.py
-      - mvn sonar:sonar -Dsonar.login=$LOGIN -Dsonar.host.url=$HOST -Dsonar.projectKey=$Project -Dsonar.organization=$Organization
+      - pytest test_DMDOMITINV00091125.py --junitxml=report.xml
+      - sonar-scanner \
+          -Dsonar.projectKey=$Project \
+          -Dsonar.organization=$Organization \
+          -Dsonar.host.url=$HOST \
+          -Dsonar.login=$LOGIN \
+          -Dsonar.python.coverage.reportPaths=report.xml
       - sleep 5
-      - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project >result.json
+      - curl https://sonarcloud.io/api/qualitygates/project_status?projectKey=$Project > result.json
       - cat result.json
-      - if [ $(jq -r '.projectStatus.status' result.json) = ERROR ] ; then $CODEBUILD_BUILD_SUCCEEDING -eq 0 ;fi
+      - if [ "$(jq -r '.projectStatus.status' result.json)" = "ERROR" ]; then exit 1; fi
+
+artifacts:
+  files:
+    - 'report.xml'
+  discard-paths: yes
+
+reports:
+  pytest_reports:
+    files:
+      - 'report.xml'
+    discard-paths: yes
