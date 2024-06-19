@@ -10,6 +10,8 @@ phases:
   build:
     commands:
       - pytest test_glue_files.py --junitxml=report.xml
+  post_build:
+    commands:
       - python send_email_report.py
 
 artifacts:
