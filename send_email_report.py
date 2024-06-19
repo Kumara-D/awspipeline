@@ -36,16 +36,16 @@ def send_email(sender, receiver, subject, body, attachment_path):
 if __name__ == "__main__":
     # Developer email addresses
     developer_emails = {
-        "DMDOMITINV00091125.py": "Kumara.Devegowda@ibsplc.com",
-        "DMDOMITINV00091126.py": "Kumara.Devegowda@ibsplc.com",
-        "DMDOMITINV00091127.py": "Kumara.Devegowda@ibsplc.com",
+        "DMDOMITINV00091125.py": "kumard25101995@gmail.com",
+        "DMDOMITINV00091126.py": "kumard25101995@gmail.com",
+        "DMDOMITINV00091127.py": "kumard25101995@gmail.com",
     }
 
     # Path to the JUnit XML report
     report_path = "report.xml"  # Update this path as per your report location
 
     # Sender information
-    sender_email = "Kumara.Devegowda@ibsplc.com"
+    sender_email = "kumard25101995@gmail.com"
     subject = "Test Report"
 
     # Iterate over the developer emails and send emails
