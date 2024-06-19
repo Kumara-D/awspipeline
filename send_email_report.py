@@ -1,65 +1,56 @@
-import boto3
 import os
-import xml.etree.ElementTree as ET
+import boto3
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+from email.mime.application import MIMEApplication
 
-# Initialize SES client
-ses = boto3.client('ses', region_name='ap-south-1')  # Specify your region
+# Function to send email
+def send_email(sender, receiver, subject, body, attachment_path):
+    # Initialize SES client
+    ses_client = boto3.client('ses', region_name='your-region')
 
-# Developer emails configuration
-developers = {
-    "DMDOMITINV00091125.py": "Kumara.Devegowda@ibsplc.com",
-    "DMDOMITINV00091126.py": "Kumara.Devegowda@ibsplc.com",
-    "DMDOMITINV00091127.py": "Kumara.Devegowda@ibsplc.com"
-    # Add more mappings as needed
-}
+    # Create email message
+    msg = MIMEMultipart()
+    msg['From'] = sender
+    msg['To'] = receiver
+    msg['Subject'] = subject
 
-def parse_results(report_path):
-    results = {}
-    tree = ET.parse(report_path)
-    root = tree.getroot()
+    # Attach text body
+    msg.attach(MIMEText(body, 'plain'))
 
-    for testcase in root.findall('.//testcase'):
-        script_name = testcase.get('name')
-        failure = testcase.find('failure')
-        if failure is not None:
-            results[script_name] = f"FAIL: {failure.text.strip()}"
-        else:
-            results[script_name] = "PASS"
+    # Attach report file
+    with open(attachment_path, 'rb') as file:
+        attachment = MIMEApplication(file.read(), Name=os.path.basename(attachment_path))
+    attachment['Content-Disposition'] = f'attachment; filename="{os.path.basename(attachment_path)}"'
+    msg.attach(attachment)
 
-    return results
-
-def send_email(to_email, script_name, result):
-    subject = f"Test Result for {script_name}"
-    body = f"The result for {script_name} is:\n\n{result}"
-    response = ses.send_email(
-        Source='your-email@example.com',  # Replace with your verified SES email
-        Destination={
-            'ToAddresses': [
-                to_email,
-            ],
-        },
-        Message={
-            'Subject': {
-                'Data': subject,
-                'Charset': 'UTF-8'
-            },
-            'Body': {
-                'Text': {
-                    'Data': body,
-                    'Charset': 'UTF-8'
-                }
-            }
-        }
+    # Send email
+    response = ses_client.send_raw_email(
+        Source=sender,
+        Destinations=[receiver],
+        RawMessage={'Data': msg.as_string()}
     )
+
     return response
 
-def main():
-    report_path = 'report.xml'
-    results = parse_results(report_path)
-    
-    for script, result in results.items():
-        if script in developers:
-            send_email(developers[script], script, result)
-
 if __name__ == "__main__":
-    main()
+    # Developer email addresses
+    developer_emails = {
+        "DMDOMITINV00091125.py": "Kumara.Devegowda@ibsplc.com",
+        "DMDOMITINV00091126.py": "Kumara.Devegowda@ibsplc.com",
+        "DMDOMITINV00091127.py": "Kumara.Devegowda@ibsplc.com",
+    }
+
+    # Path to the JUnit XML report
+    report_path = "report.xml"  # Update this path as per your report location
+
+    # Sender information
+    sender_email = "sender@example.com"
+    subject = "Test Report"
+
+    # Iterate over the developer emails and send emails
+    for script_name, email in developer_emails.items():
+        body = f"Hello, please find the attached report for {script_name}."
+
+        response = send_email(sender_email, email, subject, body, report_path)
+        print(f"Email sent to {script_name}: {response}")
