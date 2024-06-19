@@ -7,7 +7,7 @@ phases:
       - pip install pytest
   build:
     commands:
-      - pytest test_DMDOMITINV00091125.py --junitxml=report.xml
+      - pytest test_glue_files.py --junitxml=report.xml
 
 artifacts:
   files:
