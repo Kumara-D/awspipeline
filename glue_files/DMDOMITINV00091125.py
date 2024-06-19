@@ -54,7 +54,7 @@ def main():
     try:
         insert_table_query = \
             f" INSERT INTO {ouput_schema}.{target_table} " \
-            " WITH CONTENTS AS ( "
+            " WITH CONTENTS AS ( " \
             " SELECT " \
             " A.key as key,	 " \
             " A.flt_date  as flt_date ,	 " \
