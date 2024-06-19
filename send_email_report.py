@@ -7,7 +7,7 @@ from email.mime.application import MIMEApplication
 # Function to send email
 def send_email(sender, receiver, subject, body, attachment_path):
     # Initialize SES client
-    ses_client = boto3.client('ses', region_name='your-region')
+    ses_client = boto3.client('ses', region_name='ap-south-1')
 
     # Create email message
     msg = MIMEMultipart()
@@ -45,7 +45,7 @@ if __name__ == "__main__":
     report_path = "report.xml"  # Update this path as per your report location
 
     # Sender information
-    sender_email = "sender@example.com"
+    sender_email = "Kumara.Devegowda@ibsplc.com"
     subject = "Test Report"
 
     # Iterate over the developer emails and send emails
