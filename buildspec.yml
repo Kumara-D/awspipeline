@@ -1,0 +1,23 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.8
+    commands:
+      - pip install pytest
+      - pip install boto3
+  build:
+    commands:
+      - pytest test_glue_files.py --junitxml=report.xml
+
+artifacts:
+  files:
+    - '**/*'
+  discard-paths: yes
+
+reports:
+  pytest_reports:
+    files:
+      - 'report.xml'
+    discard-paths: yes
